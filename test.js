@@ -1,44 +1,35 @@
 'use strict';
 const Promise = require('bluebird');
-const RpsQ = require('./src');
-let rpsQ = new RpsQ({
-	requestsPerSecond: 0.5,
+const RpsQueue = require('./src');
+let rpsQueue = new RpsQueue({
+	requestsPerSecond: 2,
 	maxConcurrent: 2
 });
 
-rpsQ.add(() => {
+function logMetrics() {
+	console.log('NumProcessed:', rpsQueue.getNumProcessed());
+	console.log('QueueLength:', rpsQueue.getQueueLength());
+	console.log('NumConcurrent:', rpsQueue.getNumConcurrent());
+	console.log('--------------');
+}
+
+rpsQueue.add(() => {
 	return Promise.delay(3000).then(() => {
-		console.log('did number 1');
+		console.log('Done number 1');
 	});
-}).then(() => {
-	console.log(rpsQ.getNumProcessed());
-	console.log(rpsQ.getQueueLength());
-	console.log(rpsQ.getNumConcurrent());
-});
-rpsQ.add(() => {
+}).then(() => logMetrics());
+rpsQueue.add(() => {
 	return Promise.delay(3000).then(() => {
-		console.log('did number 2');
+		console.log('Done number 2');
 	});
-}).then(() => {
-	console.log(rpsQ.getNumProcessed());
-	console.log(rpsQ.getQueueLength());
-	console.log(rpsQ.getNumConcurrent());
-});
-rpsQ.add(() => {
+}).then(() => logMetrics());
+rpsQueue.add(() => {
 	return Promise.delay(3000).then(() => {
-		console.log('did number 3');
+		console.log('Done number 3');
 	});
-}).then(() => {
-	console.log(rpsQ.getNumProcessed());
-	console.log(rpsQ.getQueueLength());
-	console.log(rpsQ.getNumConcurrent());
-});
-rpsQ.add(() => {
+}).then(() => logMetrics());
+rpsQueue.add(() => {
 	return Promise.delay(3000).then(() => {
-		console.log('did number 4');
+		console.log('Done number 4');
 	});
-}).then(() => {
-	console.log(rpsQ.getNumProcessed());
-	console.log(rpsQ.getQueueLength());
-	console.log(rpsQ.getNumConcurrent());
-});
+}).then(() => logMetrics());
