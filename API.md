@@ -8,7 +8,7 @@ The rpsQueue class attempts to process functionCalls from a queue at a fixed rat
 
 | Name | Type | Description |
 | --- | --- | --- |
-| requestsPerSecond | <code>number</code> | The target rate for processing messages. The actual rate may be less than this value. Note the rate can be changed on the fly while the processor is running. |
+| requestsPerSecond | <code>number</code> | The target rate for processing function calls. The actual rate may be less than this value. Note the rate can be changed on the fly while the processor is running. |
 
 
 * [rpsQueue](#rpsQueue)

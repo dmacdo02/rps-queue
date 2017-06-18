@@ -6,7 +6,7 @@ const bluebird = require('bluebird');
 /**
  * The rpsQueue class attempts to process functionCalls from a queue at a fixed rate. The class ensures a maximum concurrency and a maximum number of items queued.
  *
- * @property {number} requestsPerSecond - The target rate for processing messages. The actual rate may be less than this value. Note the rate can be changed on the fly while the processor is running.
+ * @property {number} requestsPerSecond - The target rate for processing function calls. The actual rate may be less than this value. Note the rate can be changed on the fly while the processor is running.
  */
 class rpsQueue {
 
