@@ -1,7 +1,7 @@
 <a name="rpsQueue"></a>
 
 ## rpsQueue
-The rpsQueue class attempts to process functionCalls from a queue at a fixed rate. The class ensures a maximum concurrency and a maximum number of items queued.
+The rpsQueue class attempts to process functionCalls from a queue at a fixed rate. The class ensures a maximum concurrency and a maximum number of items queued. The queue starts right away.
 
 **Kind**: global class  
 **Properties**
@@ -13,6 +13,9 @@ The rpsQueue class attempts to process functionCalls from a queue at a fixed rat
 
 * [rpsQueue](#rpsQueue)
     * [new rpsQueue(options)](#new_rpsQueue_new)
+    * [.isStarted](#rpsQueue+isStarted) ⇒ <code>boolean</code>
+    * [.start()](#rpsQueue+start)
+    * [.stop()](#rpsQueue+stop)
     * [.add(callbackFunction)](#rpsQueue+add) ⇒ <code>promise</code>
     * [.getQueueLength()](#rpsQueue+getQueueLength) ⇒ <code>number</code>
     * [.getNumProcessed()](#rpsQueue+getNumProcessed) ⇒ <code>number</code>
@@ -32,6 +35,23 @@ Creates a new queue with the specified configuration.
 | [options.maxConcurrent] | <code>number</code> | <code>Infinity</code> | The maximum number of items in the queue processed at any given time. |
 | [options.maxQueued] | <code>number</code> | <code>Infinity</code> | The maximum queue length. |
 
+<a name="rpsQueue+isStarted"></a>
+
+### rpsQueue.isStarted ⇒ <code>boolean</code>
+**Kind**: instance property of [<code>rpsQueue</code>](#rpsQueue)  
+**Returns**: <code>boolean</code> - Indicates if queue is processing.  
+<a name="rpsQueue+start"></a>
+
+### rpsQueue.start()
+Starts processing the queue
+
+**Kind**: instance method of [<code>rpsQueue</code>](#rpsQueue)  
+<a name="rpsQueue+stop"></a>
+
+### rpsQueue.stop()
+Stops processing the queue
+
+**Kind**: instance method of [<code>rpsQueue</code>](#rpsQueue)  
 <a name="rpsQueue+add"></a>
 
 ### rpsQueue.add(callbackFunction) ⇒ <code>promise</code>

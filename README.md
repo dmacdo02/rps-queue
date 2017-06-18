@@ -47,7 +47,10 @@ rpsQueue.add(() => {
 	return Promise.delay(3000).then(() => {
 		console.log('Done number 4');
 	});
-}).then(() => logMetrics());
+}).then(() => {
+	logMetrics();
+	rpsQueue.stop();
+});
 
 ```
 

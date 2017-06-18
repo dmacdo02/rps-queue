@@ -4,7 +4,7 @@ const bluebird = require('bluebird');
 
 /* eslint valid-jsdoc: ["error", { "requireReturn": false }] */
 /**
- * The rpsQueue class attempts to process functionCalls from a queue at a fixed rate. The class ensures a maximum concurrency and a maximum number of items queued.
+ * The rpsQueue class attempts to process functionCalls from a queue at a fixed rate. The class ensures a maximum concurrency and a maximum number of items queued. The queue starts right away.
  *
  * @property {number} requestsPerSecond - The target rate for processing function calls. The actual rate may be less than this value. Note the rate can be changed on the fly while the processor is running.
  */
@@ -21,13 +21,39 @@ class rpsQueue {
 	 */
 	constructor(options) {
 		this.Promise = options.PromiseLibrary || bluebird;
-		this.requestsPerSecond = options.requestsPerSecond || Infinity;
+		this._requestsPerSecond = options.requestsPerSecond || Infinity;
 		this.maxConcurrent = options.maxConcurrent || Infinity;
 		this.maxQueued = options.maxQueued || Infinity;
 
 		this.queue = [];
 		this._numProcessed = 0;
 		this._currentConcurrent = 0;
+		this.start();
+	}
+
+	/**
+	* Starts processing the queue
+	*/
+	start() {
+		const intervalRate = 1000 / this._requestsPerSecond;
+		this._requestsPerSecond = this._requestsPerSecond;
+		this._timer = setInterval(this._dequeue.bind(this), intervalRate);
+		this._isStarted = true;
+	}
+
+	/**
+	* Stops processing the queue
+	*/
+	stop() {
+		clearInterval(this._timer);
+		this._isStarted = false;
+	}
+
+	/**
+	* @returns {boolean} Indicates if queue is processing.
+	*/
+	get isStarted() {
+		return this._isStarted;
 	}
 
 	/**
@@ -72,10 +98,9 @@ class rpsQueue {
 	}
 
 	set requestsPerSecond(requestsPerSecond) {
-		clearInterval(this._timer);
-		const intervalRate = 1000 / requestsPerSecond;
+		this.stop();
 		this._requestsPerSecond = requestsPerSecond;
-		this._timer = setInterval(this._dequeue.bind(this), intervalRate);
+		this.start();
 	}
 
 	get requestsPerSecond() {
