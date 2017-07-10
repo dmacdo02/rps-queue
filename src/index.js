@@ -10,6 +10,13 @@ const bluebird = require('bluebird');
  */
 class rpsQueue {
 
+	_numberOrInfinity(value) {
+		if (!isNaN(value) && value !== null && value !== undefined) {
+			return value;
+		}
+		return Infinity;
+	}
+
 	/**
 	 * Creates a new queue with the specified configuration.
 	 *
@@ -20,11 +27,11 @@ class rpsQueue {
 	 * @param {number} [options.maxQueued=Infinity] - The maximum queue length.
 	 */
 	constructor(options) {
+		options = options || {};
 		this.Promise = options.PromiseLibrary || bluebird;
-		this._requestsPerSecond = options.requestsPerSecond || Infinity;
-		this.maxConcurrent = options.maxConcurrent || Infinity;
-		this.maxQueued = options.maxQueued || Infinity;
-
+		this._requestsPerSecond = this._numberOrInfinity(options.requestsPerSecond);
+		this.maxConcurrent = this._numberOrInfinity(options.maxConcurrent);
+		this.maxQueued = this._numberOrInfinity(options.maxQueued);
 		this.queue = [];
 		this._numProcessed = 0;
 		this._currentConcurrent = 0;
@@ -98,9 +105,12 @@ class rpsQueue {
 	}
 
 	set requestsPerSecond(requestsPerSecond) {
+		const wasStarted = this._isStarted;
 		this.stop();
 		this._requestsPerSecond = requestsPerSecond;
-		this.start();
+		if (wasStarted) {
+			this.start();
+		}
 	}
 
 	get requestsPerSecond() {
@@ -117,7 +127,6 @@ class rpsQueue {
 			return;
 		}
 		this._currentConcurrent++;
-
 		const item = this.queue.shift();
 		this.Promise.resolve(item.callbackFunction())
 			.then((res) => {
