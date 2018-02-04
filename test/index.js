@@ -59,7 +59,7 @@ describe('rpsQueue', () => {
 	});
 
 	it('queue is started on initialization', () => {
-		const queue = new Queue();
+		const queue = new Queue({start:true});
 		assert.equal(queue.isStarted, true);
 	});
 
@@ -100,6 +100,7 @@ describe('rpsQueue', () => {
 
 	it('can update rate, does not affect isStarted state', () => {
 		const queue = new Queue();
+		queue.start();
 		assert.equal(Infinity, queue.requestsPerSecond);
 		assert.equal(true, queue.isStarted);
 		queue.requestsPerSecond = 20;
