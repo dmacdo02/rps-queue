@@ -16,6 +16,7 @@ The rpsQueue class attempts to process functionCalls from a queue at a fixed rat
     * [.isStarted](#rpsQueue+isStarted) ⇒ <code>boolean</code>
     * [.start()](#rpsQueue+start)
     * [.stop()](#rpsQueue+stop)
+    * [.addNoStart(callbackFunction)](#rpsQueue+addNoStart) ⇒ <code>promise</code>
     * [.add(callbackFunction)](#rpsQueue+add) ⇒ <code>promise</code>
     * [.getQueueLength()](#rpsQueue+getQueueLength) ⇒ <code>number</code>
     * [.getNumProcessed()](#rpsQueue+getNumProcessed) ⇒ <code>number</code>
@@ -34,6 +35,7 @@ Creates a new queue with the specified configuration.
 | [options.requestsPerSecond] | <code>number</code> | <code>Infinity</code> | The requests per second you wish to process. |
 | [options.maxConcurrent] | <code>number</code> | <code>Infinity</code> | The maximum number of items in the queue processed at any given time. |
 | [options.maxQueued] | <code>number</code> | <code>Infinity</code> | The maximum queue length. |
+| [options.start] | <code>boolean</code> | <code>false</code> | Wether the queue should start running at instantion |
 
 <a name="rpsQueue+isStarted"></a>
 
@@ -52,10 +54,22 @@ Starts processing the queue
 Stops processing the queue
 
 **Kind**: instance method of [<code>rpsQueue</code>](#rpsQueue)  
+<a name="rpsQueue+addNoStart"></a>
+
+### rpsQueue.addNoStart(callbackFunction) ⇒ <code>promise</code>
+Adds a function call to the end of the queue to be processed.This function does not start the queue if it was stopped
+
+**Kind**: instance method of [<code>rpsQueue</code>](#rpsQueue)  
+**Returns**: <code>promise</code> - Fulfills when the function call has been completed.  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| callbackFunction | <code>object</code> | A function call to be added to the queue to be processed at a later time. |
+
 <a name="rpsQueue+add"></a>
 
 ### rpsQueue.add(callbackFunction) ⇒ <code>promise</code>
-Adds a function call to the end of the queue to be processed.
+Adds a function call to the end of the queue to be processed.This starts the queue if it was not active
 
 **Kind**: instance method of [<code>rpsQueue</code>](#rpsQueue)  
 **Returns**: <code>promise</code> - Fulfills when the function call has been completed.  
