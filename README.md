@@ -1,6 +1,7 @@
-# rps-queue [![NPM version](https://badge.fury.io/js/rps-queue.svg)](https://npmjs.org/package/rps-queue)
+# rps-queue
 
 > A queue that will dequeue (call a provided function) at a given rate and has a max number concurrent (active functions running)
+> This fork makes the queue stop processing when it is empty.s
 
 ## Installation
 
@@ -10,7 +11,7 @@ $ npm install --save rps-queue
 
 ## Usage
 
-For a full API reference, see [API.md](https://github.com/dmacdo02/rps-queue/blob/master/API.md).
+For a full API reference, see [API.md](https://github.com/MoronixProduct3/rps-queue/blob/master/API.md).
 
 ```js
 'use strict';

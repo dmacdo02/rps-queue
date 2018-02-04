@@ -26,6 +26,7 @@ class rpsQueue {
 	 * @param {number} [options.requestsPerSecond=Infinity] - The requests per second you wish to process.
 	 * @param {number} [options.maxConcurrent=Infinity] - The maximum number of items in the queue processed at any given time.
 	 * @param {number} [options.maxQueued=Infinity] - The maximum queue length.
+	 * @param {boolean} [options.start=false] - Wether the queue should start running at instantion
 	 */
 	constructor(options) {
 		options = options || {};
@@ -36,7 +37,10 @@ class rpsQueue {
 		this.queue = new Deque();
 		this._numProcessed = 0;
 		this._currentConcurrent = 0;
-		this.start();
+		if (options.start)
+			this.start();
+		else
+			this._isStarted = false;
 	}
 
 	/**
@@ -66,11 +70,12 @@ class rpsQueue {
 
 	/**
 	 * Adds a function call to the end of the queue to be processed.
+	 * This function does not start the queue if it was stopped
 	 *
 	 * @param {object} callbackFunction - A function call to be added to the queue to be processed at a later time.
 	 * @returns {promise} Fulfills when the function call has been completed.
 	 */
-	add(callbackFunction) {
+	addNoStart(callbackFunction) {
 		return new this.Promise((resolve, reject) => {
 			if (this.queue.length >= this.maxQueued) {
 				reject(new Error('Exceeded max queue length'));
@@ -82,6 +87,22 @@ class rpsQueue {
 				reject
 			});
 		});
+	}
+
+	/**
+	 * Adds a function call to the end of the queue to be processed.
+	 * This starts the queue if it was not active
+	 *
+	 * @param {object} callbackFunction - A function call to be added to the queue to be processed at a later time.
+	 * @returns {promise} Fulfills when the function call has been completed.
+	 */
+	add(callbackFunction) {
+		var promise = this.addNoStart(callbackFunction);
+
+		if (! this._isStarted)
+			this.start();
+
+		return promise;
 	}
 
 	/**
@@ -124,7 +145,12 @@ class rpsQueue {
 	}
 
 	_dequeue() {
-		if (this._currentConcurrent >= this.maxConcurrent || this.queue.length === 0) {
+		// Prevent object from running when there is nothing in queue
+		if (this.queue.length === 0){
+			this.stop();
+			return;
+		}
+		if (this._currentConcurrent >= this.maxConcurrent) {
 			return;
 		}
 		this._currentConcurrent++;
