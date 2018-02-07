@@ -26,7 +26,8 @@
   },
   "homepage": "https://github.com/dmacdo02/rps-queue#readme",
   "dependencies": {
-    "bluebird": "^3.5.0"
+    "bluebird": "^3.5.0",
+    "double-ended-queue": "^2.1.0-0"
   },
   "devDependencies": {
     "jsdoc-to-markdown": "^3.0.0",

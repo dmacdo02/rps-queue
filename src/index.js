@@ -1,6 +1,7 @@
 'use strict';
 
 const bluebird = require('bluebird');
+const Deque = require('double-ended-queue');
 
 /* eslint valid-jsdoc: ["error", { "requireReturn": false }] */
 /**
@@ -32,7 +33,7 @@ class rpsQueue {
 		this._requestsPerSecond = this._numberOrInfinity(options.requestsPerSecond);
 		this.maxConcurrent = this._numberOrInfinity(options.maxConcurrent);
 		this.maxQueued = this._numberOrInfinity(options.maxQueued);
-		this.queue = [];
+		this.queue = new Deque();
 		this._numProcessed = 0;
 		this._currentConcurrent = 0;
 		this.start();
